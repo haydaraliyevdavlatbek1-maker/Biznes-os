@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BIZNES OS — Business Management</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#718096;--line:#e7ebf2;--primary:#2563eb;--primary2:#1d4ed8;--green:#16a34a;--red:#dc2626;--amber:#d97706;--sidebar:#111827;--sidebar2:#1f2937;--radius:14px}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
+.app{display:flex;min-height:100vh}.sidebar{width:260px;background:var(--sidebar);color:#dbe4f0;position:fixed;inset:0 auto 0 0;padding:20px 14px;z-index:20;overflow:auto}
+.logo{font-size:22px;font-weight:800;padding:8px 12px 20px;color:white}.logo span{color:#60a5fa}
+.biz{background:#1f2937;border:1px solid #334155;border-radius:12px;padding:12px;margin:0 4px 18px}.biz b{display:block;color:#fff}.biz small{color:#94a3b8}
+.nav{display:grid;gap:4px}.nav button{background:transparent;color:#cbd5e1;text-align:left;padding:11px 12px;border-radius:9px;font-weight:600}.nav button:hover,.nav button.active{background:#263449;color:#fff}.nav .section{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;padding:16px 12px 5px}
+.main{margin-left:260px;width:calc(100% - 260px)}.top{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}.search{width:330px;position:relative}.search input{width:100%;padding:11px 14px 11px 38px;border:1px solid var(--line);border-radius:10px;outline:none}.search span{position:absolute;left:13px;top:9px;color:#94a3b8}.topright{display:flex;gap:10px;align-items:center}.iconbtn{background:#f4f6fa;padding:10px;border-radius:10px}.avatar{width:38px;height:38px;border-radius:50%;background:#dbeafe;color:#1d4ed8;display:grid;place-items:center;font-weight:800}
+.content{padding:28px;max-width:1600px;margin:auto}.pagehead{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.pagehead h1{margin:0;font-size:28px}.muted{color:var(--muted)}.actions{display:flex;gap:9px}.btn{padding:10px 14px;border-radius:9px;font-weight:700}.btn.primary{background:var(--primary);color:#fff}.btn.primary:hover{background:var(--primary2)}.btn.light{background:#fff;border:1px solid var(--line)}.btn.danger{background:#fee2e2;color:#b91c1c}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:19px;box-shadow:0 1px 2px #00000005}.metric{display:flex;justify-content:space-between}.metric .ico{width:42px;height:42px;border-radius:11px;background:#eff6ff;color:#2563eb;display:grid;place-items:center;font-size:20px}.metric h3{margin:10px 0 2px;font-size:26px}.metric p{margin:0;color:var(--muted);font-size:13px}.up{color:var(--green);font-size:12px;font-weight:700;margin-top:8px}.down{color:var(--red);font-size:12px;font-weight:700;margin-top:8px}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}.card h2{font-size:16px;margin:0 0 16px}.chartbox{height:290px}.tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{font-size:12px;color:#64748b;text-transform:uppercase}.table td{font-size:14px}.badge{padding:5px 8px;border-radius:20px;font-size:11px;font-weight:800}.green{background:#dcfce7;color:#166534}.red{background:#fee2e2;color:#991b1b}.amber{background:#fef3c7;color:#92400e}.blue{background:#dbeafe;color:#1e40af}
+.page{display:none}.page.active{display:block}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.toolbar input,.toolbar select{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;outline:none}
+.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px;color:#475569}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;outline:none}.field textarea{min-height:90px}
+.modal{position:fixed;inset:0;background:#0f172a80;display:none;align-items:center;justify-content:center;z-index:100;padding:20px}.modal.show{display:flex}.modalbox{background:#fff;border-radius:16px;width:min(620px,100%);max-height:90vh;overflow:auto;padding:22px}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modalhead h2{margin:0}.close{background:#f1f5f9;border-radius:8px;padding:7px 10px}
+.pos{display:grid;grid-template-columns:1.4fr .8fr;gap:16px}.products{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.prod{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;text-align:left}.prod:hover{border-color:#93c5fd;box-shadow:0 3px 10px #00000008}.prod .pic{height:80px;border-radius:9px;background:linear-gradient(135deg,#eff6ff,#f8fafc);display:grid;place-items:center;font-size:30px;margin-bottom:10px}.prod b{display:block}.prod small{color:var(--muted)}.cart{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;position:sticky;top:90px;height:max-content}.cartitem{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.qty{display:flex;align-items:center;gap:6px}.qty button{width:25px;height:25px;border-radius:6px;background:#f1f5f9}.totalrow{display:flex;justify-content:space-between;margin-top:12px}.grand{font-size:20px;font-weight:800}.paygrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}.paygrid button{padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff}.paygrid button.selected{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8;font-weight:800}
+.mobilemenu{display:none}
+.empty{text-align:center;padding:45px;color:var(--muted)}
+.kpirow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.mini{padding:14px;background:#f8fafc;border-radius:10px}.mini b{font-size:18px}
+@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.grid2,.pos{grid-template-columns:1fr}.products{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:translateX(0)}.main{margin-left:0;width:100%}.mobilemenu{display:block}.search{display:none}.content{padding:18px}.cards{grid-template-columns:1fr 1fr}.products{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}.top{padding:0 16px}.pagehead h1{font-size:23px}.kpirow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="logo">BIZNES<span>OS</span></div>
+  <div class="biz"><b>Haydaraliyev Store</b><small>Asosiy filial · UZS</small></div>
+  <div class="nav">
+    <div class="section">Asosiy</div>
+    <button class="active" data-page="dashboard">▦ &nbsp; Dashboard</button>
+    <button data-page="pos">🛒 &nbsp; Kassa</button>
+    <button data-page="sales">↗ &nbsp; Savdolar</button>
+    <div class="section">Mahsulot va ombor</div>
+    <button data-page="products">▣ &nbsp; Mahsulotlar</button>
+    <button data-page="inventory">▤ &nbsp; Ombor</button>
+    <button data-page="purchases">⇩ &nbsp; Xaridlar</button>
+    <div class="section">Mijozlar</div>
+    <button data-page="customers">♙ &nbsp; Mijozlar</button>
+    <button data-page="suppliers">♧ &nbsp; Yetkazib beruvchilar</button>
+    <div class="section">Moliya</div>
+    <button data-page="finance">₸ &nbsp; Moliya</button>
+    <button data-page="debts">◷ &nbsp; Qarzdorlik</button>
+    <button data-page="reports">◒ &nbsp; Hisobotlar</button>
+    <div class="section">Boshqaruv</div>
+    <button data-page="employees">♙ &nbsp; Xodimlar</button>
+    <button data-page="settings">⚙ &nbsp; Sozlamalar</button>
+  </div>
+</aside>
+<main class="main">
+<header class="top"><div class="topright"><button class="iconbtn mobilemenu" onclick="toggleSide()">☰</button><div class="search"><span>⌕</span><input id="globalSearch" placeholder="Qidirish..."></div></div><div class="topright"><button class="iconbtn">🔔</button><div class="avatar">D</div><b>Davlatbek</b></div></header>
+<div class="content">
+
+<section class="page active" id="dashboard">
+ <div class="pagehead"><div><h1>Dashboard</h1><p class="muted">Biznesingiz holati bo‘yicha umumiy ko‘rinish</p></div><div class="actions"><button class="btn light" onclick="exportData()">⬇ Eksport</button><button class="btn primary" onclick="go('pos')">+ Yangi savdo</button></div></div>
+ <div class="cards">
+  <div class="card metric"><div><p>Bugungi savdo</p><h3 id="mSales">0 so‘m</h3><div class="up">↑ Real vaqt</div></div><div class="ico">₸</div></div>
+  <div class="card metric"><div><p>Bugungi foyda</p><h3 id="mProfit">0 so‘m</h3><div class="up">↑ Hisoblangan</div></div><div class="ico">↗</div></div>
+  <div class="card metric"><div><p>Bugungi xarajat</p><h3 id="mExpense">0 so‘m</h3><div class="down">↓ Xarajatlar</div></div><div class="ico">−</div></div>
+  <div class="card metric"><div><p>Ombor qiymati</p><h3 id="mStock">0 so‘m</h3><div class="up">● Qoldiq</div></div><div class="ico">▣</div></div>
+ </div>
+ <div class="grid2">
+  <div class="card"><h2>Savdo dinamikasi</h2><div class="chartbox"><canvas id="salesChart"></canvas></div></div>
+  <div class="card"><h2>Tezkor ko‘rsatkichlar</h2><div class="kpirow"><div class="mini"><small class="muted">Mahsulotlar</small><br><b id="kProducts">0</b></div><div class="mini"><small class="muted">Mijozlar</small><br><b id="kCustomers">0</b></div><div class="mini"><small class="muted">Kam qoldiq</small><br><b id="kLow">0</b></div></div><div style="height:220px;margin-top:12px"><canvas id="categoryChart"></canvas></div></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h2>So‘nggi savdolar</h2><div class="tablewrap"><table class="table"><thead><tr><th>№</th><th>Vaqt</th><th>Mijoz</th><th>Summa</th><th>To‘lov</th><th>Holat</th></tr></thead><tbody id="recentSales"></tbody></table></div></div>
+</section>
+
+<section class="page" id="pos">
+ <div class="pagehead"><div><h1>Kassa</h1><p class="muted">Tezkor va qulay savdo</p></div><button class="btn light" onclick="clearCart()">Tozalash</button></div>
+ <div class="pos"><div><div class="toolbar"><input id="posSearch" placeholder="Mahsulot yoki barcode..." oninput="renderPOS()"><select id="posCat" onchange="renderPOS()"><option value="">Barcha kategoriyalar</option></select></div><div class="products" id="posProducts"></div></div>
+ <div class="cart"><h2>Savat <span class="muted" id="cartCount">(0)</span></h2><div id="cart"></div><div class="totalrow"><span>Jami</span><b class="grand" id="cartTotal">0 so‘m</b></div><div class="paygrid"><button class="selected" onclick="setPay(this,'Naqd')">💵 Naqd</button><button onclick="setPay(this,'Karta')">💳 Karta</button><button onclick="setPay(this,'O‘tkazma')">🏦 O‘tkazma</button><button onclick="setPay(this,'Aralash')">↔ Aralash</button></div><button class="btn primary" style="width:100%;margin-top:12px" onclick="completeSale()">Savdoni yakunlash</button></div></div>
+</section>
+
+<section class="page" id="sales"><div class="pagehead"><div><h1>Savdolar</h1><p class="muted">Barcha savdo operatsiyalari</p></div></div><div class="card"><div class="toolbar"><input placeholder="Savdo raqami yoki mijoz..." oninput="filterTable(this,'salesTable')"><select><option>Bugun</option><option>7 kun</option><option>30 kun</option></select></div><div class="tablewrap"><table class="table"><thead><tr><th>№</th><th>Sana</th><th>Mijoz</th><th>Mahsulot</th><th>Summa</th><th>To‘lov</th><th>Holat</th></tr></thead><tbody id="salesTable"></tbody></table></div></div></section>
+
+<section class="page" id="products"><div class="pagehead"><div><h1>Mahsulotlar</h1><p class="muted">Mahsulot katalogi va narxlar</p></div><button class="btn primary" onclick="openProduct()">+ Mahsulot qo‘shish</button></div><div class="card"><div class="toolbar"><input id="productSearch" placeholder="Nomi, SKU yoki barcode..." oninput="renderProducts()"><select id="productCat" onchange="renderProducts()"><option value="">Barcha kategoriyalar</option></select></div><div class="tablewrap"><table class="table"><thead><tr><th>Mahsulot</th><th>SKU</th><th>Barcode</th><th>Kategoriya</th><th>Sotuv narxi</th><th>Qoldiq</th><th>Holat</th><th></th></tr></thead><tbody id="productTable"></tbody></table></div></div></section>
+
+<section class="page" id="inventory"><div class="pagehead"><div><h1>Ombor</h1><p class="muted">Qoldiq va harakatlar nazorati</p></div><button class="btn primary" onclick="openStock()">+ Kirim qilish</button></div><div class="cards"><div class="card"><p class="muted">Jami SKU</p><h3 id="invSku">0</h3></div><div class="card"><p class="muted">Kam qoldiq</p><h3 id="invLow">0</h3></div><div class="card"><p class="muted">Ombor qiymati</p><h3 id="invValue">0</h3></div><div class="card"><p class="muted">Harakatlar</p><h3 id="invMoves">0</h3></div></div><div class="card"><h2>Qoldiq</h2><div class="tablewrap"><table class="table"><thead><tr><th>Mahsulot</th><th>Ombor</th><th>Qoldiq</th><th>Minimal</th><th>Holat</th></tr></thead><tbody id="inventoryTable"></tbody></table></div></div></section>
+
+<section class="page" id="purchases"><div class="pagehead"><div><h1>Xaridlar</h1><p class="muted">Omborga kirim va ta’minot</p></div><button class="btn primary" onclick="openPurchase()">+ Yangi xarid</button></div><div class="card"><div class="tablewrap"><table class="table"><thead><tr><th>№</th><th>Sana</th><th>Yetkazib beruvchi</th><th>Mahsulotlar</th><th>Summa</th><th>Holat</th></tr></thead><tbody id="purchaseTable"></tbody></table></div></div></section>
+
+<section class="page" id="customers"><div class="pagehead"><div><h1>Mijozlar</h1><p class="muted">Mijozlar bazasi va xarid tarixi</p></div><button class="btn primary" onclick="openCustomer()">+ Mijoz qo‘shish</button></div><div class="card"><div class="toolbar"><input placeholder="Mijoz qidirish..." oninput="filterTable(this,'customerTable')"></div><div class="tablewrap"><table class="table"><thead><tr><th>Ism</th><th>Telefon</th><th>Xaridlar</th><th>Jami</th><th>Qarz</th><th>Holat</th></tr></thead><tbody id="customerTable"></tbody></table></div></div></section>
+
+<section class="page" id="suppliers"><div class="pagehead"><div><h1>Yetkazib beruvchilar</h1><p class="muted">Ta’minotchilar va hisob-kitoblar</p></div><button class="btn primary" onclick="openSupplier()">+ Yetkazib beruvchi</button></div><div class="card"><div class="tablewrap"><table class="table"><thead><tr><th>Nomi</th><th>Telefon</th><th>Xaridlar</th><th>Jami</th><th>Qarz</th></tr></thead><tbody id="supplierTable"></tbody></table></div></div></section>
+
+<section class="page" id="finance"><div class="pagehead"><div><h1>Moliya</h1><p class="muted">Daromad, xarajat va pul oqimi</p></div><button class="btn primary" onclick="openExpense()">+ Xarajat</button></div><div class="cards"><div class="card"><p class="muted">Daromad</p><h3 id="finIncome">0</h3></div><div class="card"><p class="muted">Xarajat</p><h3 id="finExpense">0</h3></div><div class="card"><p class="muted">Sof foyda</p><h3 id="finProfit">0</h3></div><div class="card"><p class="muted">Kassa</p><h3 id="finCash">0</h3></div></div><div class="card"><h2>Moliya operatsiyalari</h2><div class="tablewrap"><table class="table"><thead><tr><th>Sana</th><th>Turi</th><th>Izoh</th><th>Summa</th></tr></thead><tbody id="financeTable"></tbody></table></div></div></section>
+
+<section class="page" id="debts"><div class="pagehead"><div><h1>Qarzdorlik</h1><p class="muted">Mijoz va yetkazib beruvchi qarzlari</p></div></div><div class="cards"><div class="card"><p class="muted">Mijozlar qarzi</p><h3 id="custDebt">0</h3></div><div class="card"><p class="muted">Yetkazib beruvchi qarzi</p><h3 id="supDebt">0</h3></div><div class="card"><p class="muted">Jami qarz</p><h3 id="totalDebt">0</h3></div><div class="card"><p class="muted">Muddati o‘tgan</p><h3>0</h3></div></div><div class="card"><h2>Qarzlar</h2><div class="tablewrap"><table class="table"><thead><tr><th>Tomon</th><th>Telefon</th><th>Jami</th><th>To‘langan</th><th>Qoldiq</th><th>Holat</th></tr></thead><tbody id="debtTable"></tbody></table></div></div></section>
+
+<section class="page" id="reports"><div class="pagehead"><div><h1>Hisobotlar</h1><p class="muted">Biznes ko‘rsatkichlarini tahlil qiling</p></div><button class="btn light" onclick="exportData()">⬇ JSON eksport</button></div><div class="grid2"><div class="card"><h2>Daromad va xarajat</h2><div class="chartbox"><canvas id="reportChart"></canvas></div></div><div class="card"><h2>Top mahsulotlar</h2><div id="topProducts"></div></div></div></section>
+
+<section class="page" id="employees"><div class="pagehead"><div><h1>Xodimlar</h1><p class="muted">Xodimlar va rollar</p></div><button class="btn primary" onclick="openEmployee()">+ Xodim qo‘shish</button></div><div class="card"><div class="tablewrap"><table class="table"><thead><tr><th>Xodim</th><th>Telefon</th><th>Rol</th><th>Status</th><th>Qo‘shilgan</th></tr></thead><tbody id="employeeTable"></tbody></table></div></div></section>
+
+<section class="page" id="settings"><div class="pagehead"><div><h1>Sozlamalar</h1><p class="muted">Biznes konfiguratsiyasi</p></div><button class="btn primary" onclick="saveSettings()">Saqlash</button></div><div class="card"><div class="formgrid"><div class="field"><label>Biznes nomi</label><input id="setName" value="Haydaraliyev Store"></div><div class="field"><label>Telefon</label><input id="setPhone" value="+998 90 000 00 00"></div><div class="field"><label>Manzil</label><input id="setAddress" value="Farg‘ona, O‘zbekiston"></div><div class="field"><label>Valyuta</label><select><option>UZS — so‘m</option></select></div><div class="field"><label>Til</label><select><option>O‘zbekcha</option><option>Русский</option><option>English</option></select></div><div class="field"><label>Minimal qoldiq ogohlantirishi</label><input type="number" value="5"></div></div></div></section>
+
+</div></main></div>
+
+<div class="modal" id="modal"><div class="modalbox"><div class="modalhead"><h2 id="modalTitle">Qo‘shish</h2><button class="close" onclick="closeModal()">✕</button></div><div id="modalBody"></div></div></div>
+
+<script>
+const KEY='biznes_os_v2';
+const initial={
+products:[
+{id:1,name:'Coca-Cola 1.5L',sku:'CC15',barcode:'4601234567890',cat:'Ichimliklar',buy:9000,sale:14000,stock:48,min:10,unit:'dona'},
+{id:2,name:'Pepsi 1.5L',sku:'PP15',barcode:'4609876543210',cat:'Ichimliklar',buy:8500,sale:13500,stock:32,min:10,unit:'dona'},
+{id:3,name:'Nestle Suv 1.5L',sku:'NW15',barcode:'4780001234567',cat:'Ichimliklar',buy:3000,sale:5000,stock:76,min:15,unit:'dona'},
+{id:4,name:'Lays Classic 140g',sku:'LY140',barcode:'4600001112223',cat:'Oziq-ovqat',buy:11000,sale:16000,stock:18,min:8,unit:'dona'},
+{id:5,name:'Choy 100g',sku:'CH100',barcode:'4780005551112',cat:'Oziq-ovqat',buy:7000,sale:10000,stock:6,min:10,unit:'dona'},
+{id:6,name:'Sovun 100g',sku:'SV100',barcode:'4780007771118',cat:'Maishiy',buy:4500,sale:7000,stock:25,min:8,unit:'dona'}
+],
+customers:[
+{id:1,name:'Ali Valiyev',phone:'+998 90 111 22 33',orders:12,total:860000,debt:0},
+{id:2,name:'Madina Karimova',phone:'+998 91 222 33 44',orders:7,total:415000,debt:85000},
+{id:3,name:'Azizbek Tursunov',phone:'+998 93 333 44 55',orders:4,total:230000,debt:0}
+],
+suppliers:[{id:1,name:'Farg‘ona Trade',phone:'+998 90 555 66 77',orders:8,total:3200000,debt:450000},{id:2,name:'Asia Distribution',phone:'+998 91 777 88 99',orders:5,total:1850000,debt:0}],
+sales:[],purchases:[],expenses:[],moves:[],employees:[
+{name:'Davlatbek Haydaraliyev',phone:'+998 90 000 00 00',role:'OWNER',status:'Faol',date:'07.10.2026'},
+{name:'Aziza Karimova',phone:'+998 91 123 45 67',role:'CASHIER',status:'Faol',date:'05.10.2026'}
+],settings:{name:'Haydaraliyev Store',phone:'+998 90 000 00 00',address:'Farg‘ona, O‘zbekiston'}
+};
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||initial,cart=[],pay='Naqd';
+function save(){localStorage.setItem(KEY,JSON.stringify(db));refresh()}
+function money(n){return new Intl.NumberFormat('uz-UZ').format(Math.round(n))+' so‘m'}
+function now(){return new Date().toLocaleString('uz-UZ',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'})}
+function go(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(p).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));if(innerWidth<760)document.getElementById('sidebar').classList.remove('open');refresh()}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
+function toggleSide(){document.getElementById('sidebar').classList.toggle('open')}
+function refresh(){renderDashboard();renderProducts();renderPOS();renderInventory();renderSales();renderPurchases();renderCustomers();renderSuppliers();renderFinance();renderDebts();renderEmployees();fillCats()}
+function fillCats(){let cats=[...new Set(db.products.map(p=>p.cat))];['posCat','productCat'].forEach(id=>{let s=document.getElementById(id),v=s.value;s.innerHTML='<option value="">Barcha kategoriyalar</option>'+cats.map(c=>`<option ${c===v?'selected':''}>${c}</option>`).join('')})}
+function renderDashboard(){
+let income=db.sales.reduce((a,s)=>a+s.total,0), expense=db.expenses.reduce((a,e)=>a+e.amount,0), profit=db.sales.reduce((a,s)=>a+s.profit,0)-expense;
+let stock=db.products.reduce((a,p)=>a+p.stock*p.buy,0),low=db.products.filter(p=>p.stock<=p.min).length;
+mSales.textContent=money(income);mProfit.textContent=money(profit);mExpense.textContent=money(expense);mStock.textContent=money(stock);
+kProducts.textContent=db.products.length;kCustomers.textContent=db.customers.length;kLow.textContent=low;
+recentSales.innerHTML=db.sales.slice(-8).reverse().map(s=>`<tr><td>#${s.id}</td><td>${s.date}</td><td>${s.customer||'Umumiy mijoz'}</td><td>${money(s.total)}</td><td>${s.pay}</td><td><span class="badge green">Yakunlangan</span></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Hozircha savdo yo‘q</td></tr>';
+setTimeout(drawCharts,0)
+}
+let charts={};
+function drawCharts(){let labels=['Dush','Sesh','Chor','Pay','Jum','Shan','Bugun'];let sales=labels.map((_,i)=>Math.round((db.sales.reduce((a,s)=>a+s.total,0)/Math.max(1,db.sales.length))*(.55+i*.08)));['salesChart','categoryChart','reportChart'].forEach(id=>{if(charts[id])charts[id].destroy()});
+charts.salesChart=new Chart(document.getElementById('salesChart'),{type:'line',data:{labels,datasets:[{label:'Savdo',data:sales,borderColor:'#2563eb',backgroundColor:'#dbeafe',fill:true,tension:.35}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+let cats={};db.products.forEach(p=>cats[p.cat]=(cats[p.cat]||0)+p.stock*p.sale);
+charts.categoryChart=new Chart(document.getElementById('categoryChart'),{type:'doughnut',data:{labels:Object.keys(cats),datasets:[{data:Object.values(cats)}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+charts.reportChart=new Chart(document.getElementById('reportChart'),{type:'bar',data:{labels:['Daromad','Xarajat','Foyda'],datasets:[{data:[db.sales.reduce((a,s)=>a+s.total,0),db.expenses.reduce((a,e)=>a+e.amount,0),db.sales.reduce((a,s)=>a+s.profit,0)-db.expenses.reduce((a,e)=>a+e.amount,0)]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}})
+}
+function renderProducts(){let q=(productSearch?.value||'').toLowerCase(),cat=productCat?.value||'';let arr=db.products.filter(p=>(!q||[p.name,p.sku,p.barcode].join(' ').toLowerCase().includes(q))&&(!cat||p.cat===cat));productTable.innerHTML=arr.map(p=>`<tr><td><b>${p.name}</b><br><small class="muted">${p.unit}</small></td><td>${p.sku}</td><td>${p.barcode}</td><td>${p.cat}</td><td><b>${money(p.sale)}</b></td><td>${p.stock}</td><td><span class="badge ${p.stock<=p.min?'amber':'green'}">${p.stock<=p.min?'Kam qoldiq':'Mavjud'}</span></td><td><button class="btn light" onclick="editProduct(${p.id})">Tahrirlash</button></td></tr>`).join('')||'<tr><td colspan="8" class="empty">Mahsulot topilmadi</td></tr>'}
+function renderPOS(){let q=(posSearch?.value||'').toLowerCase(),cat=posCat?.value||'';let arr=db.products.filter(p=>(!q||[p.name,p.barcode,p.sku].join(' ').toLowerCase().includes(q))&&(!cat||p.cat===cat));posProducts.innerHTML=arr.map(p=>`<button class="prod" onclick="addCart(${p.id})"><div class="pic">${p.cat==='Ichimliklar'?'🥤':p.cat==='Oziq-ovqat'?'🍟':'🧼'}</div><b>${p.name}</b><small>${p.barcode}</small><div style="margin-top:8px;font-weight:800;color:#2563eb">${money(p.sale)}</div><small>Qoldiq: ${p.stock}</small></button>`).join('')||'<div class="empty">Mahsulot topilmadi</div>';renderCart()}
+function addCart(id){let p=db.products.find(x=>x.id===id);if(!p||p.stock<=0)return alert('Mahsulot qoldig‘i tugagan.');let x=cart.find(x=>x.id===id);if(x){if(x.qty>=p.stock)return alert('Ombordagi qoldiqdan ko‘p sotib bo‘lmaydi.');x.qty++}else cart.push({id,qty:1});renderCart()}
+function renderCart(){cartEl=document.getElementById('cart');cartEl.innerHTML=cart.map(x=>{let p=db.products.find(p=>p.id===x.id);return `<div class="cartitem"><div><b>${p.name}</b><br><small>${money(p.sale)} × ${x.qty}</small></div><div class="qty"><button onclick="chg(${x.id},-1)">−</button><b>${x.qty}</b><button onclick="chg(${x.id},1)">+</button></div></div>`}).join('')||'<div class="empty" style="padding:25px">Savat bo‘sh</div>';let total=cart.reduce((a,x)=>a+db.products.find(p=>p.id===x.id).sale*x.qty,0);cartTotal.textContent=money(total);cartCount.textContent='('+cart.reduce((a,x)=>a+x.qty,0)+')'}
+function chg(id,n){let x=cart.find(x=>x.id===id),p=db.products.find(p=>p.id===id);x.qty+=n;if(x.qty<=0)cart=cart.filter(a=>a.id!==id);if(x.qty>p.stock)x.qty=p.stock;renderCart()}
+function clearCart(){cart=[];renderCart()}
+function setPay(btn,v){document.querySelectorAll('.paygrid button').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');pay=v}
+function completeSale(){if(!cart.length)return alert('Savat bo‘sh.');let total=cart.reduce((a,x)=>a+db.products.find(p=>p.id===x.id).sale*x.qty,0),profit=0;cart.forEach(x=>{let p=db.products.find(p=>p.id===x.id);p.stock-=x.qty;profit+=(p.sale-p.buy)*x.qty;db.moves.push({date:now(),type:'Sotuv',product:p.name,qty:-x.qty})});db.sales.push({id:1000+db.sales.length+1,date:now(),customer:'Umumiy mijoz',items:cart.map(x=>({id:x.id,qty:x.qty})),total,profit,pay});cart=[];save();alert('Savdo muvaffaqiyatli yakunlandi!\\nJami: '+money(total));go('sales')}
+function renderSales(){salesTable.innerHTML=db.sales.slice().reverse().map(s=>`<tr><td>#${s.id}</td><td>${s.date}</td><td>${s.customer}</td><td>${s.items.length} tur</td><td>${money(s.total)}</td><td>${s.pay}</td><td><span class="badge green">Yakunlangan</span></td></tr>`).join('')||'<tr><td colspan="7" class="empty">Savdolar yo‘q</td></tr>'}
+function renderInventory(){let value=db.products.reduce((a,p)=>a+p.stock*p.buy,0),low=db.products.filter(p=>p.stock<=p.min).length;invSku.textContent=db.products.length;invLow.textContent=low;invValue.textContent=money(value);invMoves.textContent=db.moves.length;inventoryTable.innerHTML=db.products.map(p=>`<tr><td><b>${p.name}</b></td><td>Asosiy ombor</td><td>${p.stock} ${p.unit}</td><td>${p.min}</td><td><span class="badge ${p.stock<=p.min?'amber':'green'}">${p.stock<=p.min?'Buyurtma kerak':'Normal'}</span></td></tr>`).join('')}
+function renderPurchases(){purchaseTable.innerHTML=db.purchases.slice().reverse().map(p=>`<tr><td>#${p.id}</td><td>${p.date}</td><td>${p.supplier}</td><td>${p.items} tur</td><td>${money(p.total)}</td><td><span class="badge green">Qabul qilindi</span></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Xaridlar yo‘q</td></tr>'}
+function renderCustomers(){customerTable.innerHTML=db.customers.map(c=>`<tr><td><b>${c.name}</b></td><td>${c.phone}</td><td>${c.orders}</td><td>${money(c.total)}</td><td>${money(c.debt)}</td><td><span class="badge ${c.debt?'amber':'green'}">${c.debt?'Qarz bor':'Toza'}</span></td></tr>`).join('')}
+function renderSuppliers(){supplierTable.innerHTML=db.suppliers.map(c=>`<tr><td><b>${c.name}</b></td><td>${c.phone}</td><td>${c.orders}</td><td>${money(c.total)}</td><td>${money(c.debt)}</td></tr>`).join('')}
+function renderFinance(){let inc=db.sales.reduce((a,s)=>a+s.total,0),exp=db.expenses.reduce((a,e)=>a+e.amount,0),profit=db.sales.reduce((a,s)=>a+s.profit,0)-exp;finIncome.textContent=money(inc);finExpense.textContent=money(exp);finProfit.textContent=money(profit);finCash.textContent=money(inc-exp);let rows=[...db.expenses.map(e=>({date:e.date,type:'Xarajat',note:e.note,amount:-e.amount})),...db.sales.map(s=>({date:s.date,type:'Daromad',note:'Savdo #'+s.id,amount:s.total}))].sort((a,b)=>b.date.localeCompare(a.date));financeTable.innerHTML=rows.map(r=>`<tr><td>${r.date}</td><td>${r.type}</td><td>${r.note}</td><td style="font-weight:800;color:${r.amount<0?'#dc2626':'#16a34a'}">${r.amount>0?'+':''}${money(r.amount)}</td></tr>`).join('')||'<tr><td colspan="4" class="empty">Operatsiyalar yo‘q</td></tr>'}
+function renderDebts(){let cd=db.customers.reduce((a,c)=>a+c.debt,0),sd=db.suppliers.reduce((a,c)=>a+c.debt,0);custDebt.textContent=money(cd);supDebt.textContent=money(sd);totalDebt.textContent=money(cd+sd);debtTable.innerHTML=[...db.customers.map(c=>({name:c.name,phone:c.phone,total:c.total,debt:c.debt,type:'Mijoz'})),...db.suppliers.map(c=>({name:c.name,phone:c.phone,total:c.total,debt:c.debt,type:'Yetkazib beruvchi'}))].filter(x=>x.debt).map(x=>`<tr><td>${x.name} <small class="muted">(${x.type})</small></td><td>${x.phone}</td><td>${money(x.total)}</td><td>${money(x.total-x.debt)}</td><td>${money(x.debt)}</td><td><span class="badge amber">Ochiq</span></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Qarzlar yo‘q</td></tr>'}
+function renderEmployees(){employeeTable.innerHTML=db.employees.map(e=>`<tr><td><b>${e.name}</b></td><td>${e.phone}</td><td><span class="badge blue">${e.role}</span></td><td><span class="badge green">${e.status}</span></td><td>${e.date}</td></tr>`).join('')}
+function filterTable(input,id){let q=input.value.toLowerCase();document.querySelectorAll('#'+id+' tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}
+function modal(title,body){modalTitle.textContent=title;modalBody.innerHTML=body;document.getElementById('modal').classList.add('show')}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function openProduct(){modal('Yangi mahsulot',`<div class="formgrid"><div class="field"><label>Nomi</label><input id="fName"></div><div class="field"><label>SKU</label><input id="fSku"></div><div class="field"><label>Barcode</label><input id="fBarcode"></div><div class="field"><label>Kategoriya</label><input id="fCat" value="Oziq-ovqat"></div><div class="field"><label>Xarid narxi</label><input id="fBuy" type="number"></div><div class="field"><label>Sotuv narxi</label><input id="fSale" type="number"></div><div class="field"><label>Qoldiq</label><input id="fStock" type="number" value="0"></div><div class="field"><label>Minimal qoldiq</label><input id="fMin" type="number" value="5"></div></div><button class="btn primary" style="width:100%;margin-top:16px" onclick="createProduct()">Saqlash</button>`)}
+function createProduct(){let p={id:Date.now(),name:fName.value.trim(),sku:fSku.value.trim(),barcode:fBarcode.value.trim(),cat:fCat.value.trim()||'Boshqa',buy:+fBuy.value||0,sale:+fSale.value||0,stock:+fStock.value||0,min:+fMin.value||0,unit:'dona'};if(!p.name)return alert('Mahsulot nomini kiriting');db.products.push(p);save();closeModal()}
+function editProduct(id){let p=db.products.find(x=>x.id===id);modal('Mahsulotni tahrirlash',`<div class="formgrid"><div class="field"><label>Nomi</label><input id="eName" value="${p.name}"></div><div class="field"><label>SKU</label><input id="eSku" value="${p.sku}"></div><div class="field"><label>Barcode</label><input id="eBarcode" value="${p.barcode}"></div><div class="field"><label>Kategoriya</label><input id="eCat" value="${p.cat}"></div><div class="field"><label>Xarid narxi</label><input id="eBuy" type="number" value="${p.buy}"></div><div class="field"><label>Sotuv narxi</label><input id="eSale" type="number" value="${p.sale}"></div><div class="field"><label>Qoldiq</label><input id="eStock" type="number" value="${p.stock}"></div><div class="field"><label>Minimal</label><input id="eMin" type="number" value="${p.min}"></div></div><button class="btn primary" style="width:100%;margin-top:16px" onclick="updateProduct(${id})">Saqlash</button>`)}
+function updateProduct(id){let p=db.products.find(x=>x.id===id);Object.assign(p,{name:eName.value,sku:eSku.value,barcode:eBarcode.value,cat:eCat.value,buy:+eBuy.value,sale:+eSale.value,stock:+eStock.value,min:+eMin.value});save();closeModal()}
+function openStock(){modal('Omborga kirim',`<div class="formgrid"><div class="field"><label>Mahsulot</label><select id="stProduct">${db.products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select></div><div class="field"><label>Miqdor</label><input id="stQty" type="number" min="1"></div></div><button class="btn primary" style="width:100%;margin-top:16px" onclick="addStock()">Kirimni saqlash</button>`)}
+function addStock(){let p=db.products.find(x=>x.id==stProduct.value),q=+stQty.value;if(!q)return; p.stock+=q;db.moves.push({date:now(),type:'Kirim',product:p.name,qty:q});save();closeModal()}
+function openCustomer(){modal('Yangi mijoz',`<div class="formgrid"><div class="field"><label>Ism</label><input id="cName"></div><div class="field"><label>Telefon</label><input id="cPhone"></div></div><button class="btn primary" style="width:100%;margin-top:16px" onclick="createCustomer()">Saqlash</button>`)}
+function createCustomer(){if(!cName.value)return;db.customers.push({id:Date.now(),name:cName.value,phone:cPhone.value,orders:0,total:0,debt:0});save();closeModal()}
+function openSupplier(){modal('Yangi yetkazib beruvchi',`<div class="formgrid"><div class="field"><label>Nomi</label><input id="sName"></div><div class="field"><label>Telefon</label><input id="sPhone"></div></div><button class="btn primary" style="width:100%;margin-top:16px" onclick="createSupplier()">Saqlash</button>`)}
+function createSupplier(){if(!sName.value)return;db.suppliers.push({id:Date.now(),name:sName.value,phone:sPhone.value,orders:0,total:0,debt:0});save();closeModal()}
+function openExpense(){modal('Xarajat qo‘shish',`<div class="formgrid"><div class="field"><label>Summa</label><input id="xAmount" type="number"></div><div class="field"><label>Kategoriya</label><select id="xCat"><option>Ijara</option><option>Maosh</option><option>Transport</option><option>Marketing</option><option>Boshqa</option></select></div><div class="field"><label>Izoh</label><input id="xNote"></div></div><button class="btn primary" style="width:100%;margin-top:16px" onclick="createExpense()">Saqlash</button>`)}
+function createExpense(){let a=+xAmount.value;if(!a)return;db.expenses.push({date:now(),amount:a,cat:xCat.value,note:xNote.value||xCat.value});save();closeModal()}
+function openPurchase(){modal('Yangi xarid',`<div class="formgrid"><div class="field"><label>Yetkazib beruvchi</label><select id="pSup">${db.suppliers.map(s=>`<option>${s.name}</option>`).join('')}</select></div><div class="field"><label>Mahsulot</label><select id="pProd">${db.products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select></div><div class="field"><label>Miqdor</label><input id="pQty" type="number"></div><div class="field"><label>Jami summa</label><input id="pTotal" type="number"></div></div><button class="btn primary" style="width:100%;margin-top:16px" onclick="createPurchase()">Xaridni yakunlash</button>`)}
+function createPurchase(){let p=db.products.find(x=>x.id==pProd.value),q=+pQty.value,t=+pTotal.value;if(!q||!t)return;p.stock+=q;db.purchases.push({id:500+db.purchases.length+1,date:now(),supplier:pSup.value,items:1,total:t});db.moves.push({date:now(),type:'Xarid',product:p.name,qty:q});save();closeModal()}
+function openEmployee(){modal('Xodim qo‘shish',`<div class="formgrid"><div class="field"><label>Ism</label><input id="emName"></div><div class="field"><label>Telefon</label><input id="emPhone"></div><div class="field"><label>Rol</label><select id="emRole"><option>CASHIER</option><option>MANAGER</option><option>ACCOUNTANT</option><option>WAREHOUSE_MANAGER</option></select></div></div><button class="btn primary" style="width:100%;margin-top:16px" onclick="createEmployee()">Saqlash</button>`)}
+function createEmployee(){if(!emName.value)return;db.employees.push({name:emName.value,phone:emPhone.value,role:emRole.value,status:'Faol',date:new Date().toLocaleDateString('uz-UZ')});save();closeModal()}
+function saveSettings(){db.settings={name:setName.value,phone:setPhone.value,address:setAddress.value};document.querySelector('.biz b').textContent=db.settings.name;alert('Sozlamalar saqlandi')}
+function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='biznes-os-backup.json';a.click()}
+refresh();
+</script>
+</body>
+</html>
